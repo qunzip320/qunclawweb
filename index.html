@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; img-src 'self' data: https:; connect-src 'self';">
+  <title>Qun-龙虾应用案例 | Qun-OpenClaw Use Cases</title>
+  <meta name="description" content="汇总展示 OpenClaw 真实应用案例，按 6 大类别组织。">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- highlight.js theme -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11/styles/github.min.css">
+</head>
+<body>
+
+  <!-- ── 导航栏 ── -->
+  <header class="nav" role="banner">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">
+        <span data-zh="Qun-龙虾应用案例" data-en="Qun-OpenClaw Use Cases">Qun-龙虾应用案例</span>
+      </a>
+      <nav class="nav-links" aria-label="主导航">
+        <a href="#cases" data-zh="案例" data-en="Cases">案例</a>
+        <a href="https://github.com/hesamsheikh/awesome-openclaw-usecases"
+           target="_blank" rel="noopener" data-zh="GitHub" data-en="GitHub">GitHub</a>
+      </nav>
+      <button id="lang-toggle" class="lang-btn" aria-label="切换语言">EN</button>
+    </div>
+  </header>
+
+  <!-- ── Hero ── -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero-inner">
+      <h1 id="hero-title" class="hero-title">
+        <span data-zh="Qun-龙虾应用案例" data-en="Qun-OpenClaw Use Cases">Qun-龙虾应用案例</span>
+      </h1>
+      <p class="hero-sub" data-zh="OpenClaw 真实应用场景汇总，探索 AI 的无限可能"
+                          data-en="Real-world OpenClaw use cases — explore the possibilities of AI.">
+        OpenClaw 真实应用场景汇总，探索 AI 的无限可能
+      </p>
+      <div class="hero-badge">
+        <span data-zh="已收录" data-en="Total">已收录</span>
+        <strong id="case-count">—</strong>
+        <span data-zh="个案例" data-en="cases">个案例</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 搜索 + 分类 ── -->
+  <section id="cases" class="filter-section">
+    <div class="container">
+      <div class="search-wrap">
+        <input id="search-input" type="search" autocomplete="off"
+               placeholder="搜索案例名称或描述…"
+               data-zh-placeholder="搜索案例名称或描述…"
+               data-en-placeholder="Search by title or description…"
+               aria-label="搜索案例">
+      </div>
+      <div id="tab-bar" class="tab-bar" role="tablist" aria-label="案例分类">
+        <!-- 动态生成 -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 卡片网格 ── -->
+  <main class="container">
+    <div id="card-grid" class="card-grid" role="list">
+      <!-- 骨架屏或卡片由 main.js 渲染 -->
+    </div>
+  </main>
+
+  <!-- ── 页脚 ── -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <span data-zh="数据来源：" data-en="Data source: ">数据来源：</span>
+      <a href="https://github.com/hesamsheikh/awesome-openclaw-usecases"
+         target="_blank" rel="noopener">hesamsheikh/awesome-openclaw-usecases</a>
+    </div>
+  </footer>
+
+  <!-- CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/marked@9/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11/highlight.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+
+  <script>
+    // categoryMap 暴露给全局（case.js 需要）
+    window.categoryMap = {
+      'social-media':          { zh: '社交媒体',           en: 'Social Media' },
+      'creative-building':     { zh: '创意与构建',          en: 'Creative & Building' },
+      'infrastructure-devops': { zh: '基础设施与 DevOps',   en: 'Infrastructure & DevOps' },
+      'productivity':          { zh: '生产力工具',           en: 'Productivity' },
+      'research-learning':     { zh: '研究与学习',           en: 'Research & Learning' },
+      'finance-trading':       { zh: '金融与交易',           en: 'Finance & Trading' },
+    };
+
+    // 搜索框 placeholder i18n
+    const si = document.getElementById('search-input');
+    if (si) {
+      const updatePlaceholder = () => {
+        const l = localStorage.getItem('qunclawweb-lang') || 'zh';
+        si.placeholder = l === 'zh' ? si.dataset.zhPlaceholder : si.dataset.enPlaceholder;
+      };
+      updatePlaceholder();
+      document.getElementById('lang-toggle')?.addEventListener('click', () => {
+        setTimeout(updatePlaceholder, 0);
+      });
+    }
+  </script>
+  <script src="js/main.js"></script>
+</body>
+</html>

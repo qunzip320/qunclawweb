@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; img-src 'self' data: https:; connect-src 'self';">
+  <title>案例详情 — Qun-OpenClaw</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11/styles/github.min.css">
+</head>
+<body>
+
+  <!-- ── 导航栏 ── -->
+  <header class="nav" role="banner">
+    <div class="nav-inner">
+      <a href="/" id="back-link" class="nav-logo">
+        <span data-zh="← 返回" data-en="← Back">← 返回</span>
+      </a>
+      <nav class="nav-links" aria-label="主导航">
+        <a href="https://github.com/hesamsheikh/awesome-openclaw-usecases"
+           target="_blank" rel="noopener">GitHub</a>
+      </nav>
+      <button id="lang-toggle" class="lang-btn" aria-label="切换语言">EN</button>
+    </div>
+  </header>
+
+  <!-- ── 面包屑 ── -->
+  <div class="container">
+    <div id="breadcrumb" class="breadcrumb" aria-label="页面路径"></div>
+  </div>
+
+  <!-- ── 主内容 ── -->
+  <main class="container case-layout">
+
+    <!-- 左：markdown 内容 -->
+    <article class="case-content">
+      <h1 id="case-title" class="case-title"></h1>
+      <div id="markdown-content" class="prose"></div>
+
+      <!-- GitHub 链接 -->
+      <a id="github-link" class="gh-link" href="#" target="_blank" rel="noopener"
+         style="display:none;" data-zh="在 GitHub 查看原文 →" data-en="View on GitHub →">
+        在 GitHub 查看原文 →
+      </a>
+    </article>
+
+    <!-- 右：TOC -->
+    <aside class="toc-panel" aria-label="目录">
+      <p class="toc-heading" data-zh="目录" data-en="Contents">目录</p>
+      <div id="toc"></div>
+    </aside>
+
+  </main>
+
+  <!-- ── 页脚 ── -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <span data-zh="数据来源：" data-en="Data source: ">数据来源：</span>
+      <a href="https://github.com/hesamsheikh/awesome-openclaw-usecases"
+         target="_blank" rel="noopener">hesamsheikh/awesome-openclaw-usecases</a>
+    </div>
+  </footer>
+
+  <!-- CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/marked@9/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11/highlight.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+
+  <script>
+    window.categoryMap = {
+      'social-media':          { zh: '社交媒体',           en: 'Social Media' },
+      'creative-building':     { zh: '创意与构建',          en: 'Creative & Building' },
+      'infrastructure-devops': { zh: '基础设施与 DevOps',   en: 'Infrastructure & DevOps' },
+      'productivity':          { zh: '生产力工具',           en: 'Productivity' },
+      'research-learning':     { zh: '研究与学习',           en: 'Research & Learning' },
+      'finance-trading':       { zh: '金融与交易',           en: 'Finance & Trading' },
+    };
+  </script>
+  <script src="js/case.js"></script>
+</body>
+</html>
