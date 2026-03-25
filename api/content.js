@@ -6,7 +6,9 @@ const REPO    = 'awesome-openclaw-usecases';
 const FILE_RE = /^[a-zA-Z0-9\-_.]+\.md$/;
 
 async function translateMarkdown(markdown) {
-  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  const clientOpts = { apiKey: process.env.ANTHROPIC_API_KEY };
+  if (process.env.ANTHROPIC_BASE_URL) clientOpts.baseURL = process.env.ANTHROPIC_BASE_URL;
+  const client = new Anthropic(clientOpts);
   const message = await client.messages.create({
     model: 'claude-haiku-4-5',
     max_tokens: 4096,
