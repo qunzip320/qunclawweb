@@ -1,4 +1,5 @@
 import { concurrentMap, ghHeaders, parseFrontMatter, deriveCategory } from './_utils.js';
+import { TRANSLATIONS } from './_translations.js';
 
 const OWNER = 'hesamsheikh';
 const REPO  = 'awesome-openclaw-usecases';
@@ -34,9 +35,9 @@ export default async function handler(req, res) {
       const { data }  = parseFrontMatter(raw);
 
       const titleEn = data.title_en  || data.titleEn  || data.title || filename.replace(/[-_]/g, ' ').replace('.md', '');
-      const titleZh = data.title_zh  || data.titleZh  || titleEn;
+      const titleZh = data.title_zh  || data.titleZh  || TRANSLATIONS[filename]?.titleZh || titleEn;
       const descEn  = data.description_en || data.descriptionEn || data.description || '';
-      const descZh  = data.description_zh || data.descriptionZh || descEn;
+      const descZh  = data.description_zh || data.descriptionZh || TRANSLATIONS[filename]?.descZh || descEn;
 
       return {
         filename,

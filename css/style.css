@@ -553,3 +553,63 @@ a:hover { text-decoration: underline; }
 }
 .footer-inner a { color: var(--text-sub); }
 .footer-inner a:hover { color: var(--accent); }
+
+/* ── Category Navigation ── */
+.cat-nav { padding: 32px 0 24px; text-align: center; }
+.cat-nav-inner { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.cat-btn {
+  border: 1.5px solid #d2d2d7;
+  background: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--text-sub);
+  padding: 8px 20px;
+  border-radius: 100px;
+  transition: color var(--transition), border-color var(--transition), background var(--transition);
+  white-space: nowrap;
+}
+.cat-btn:hover { color: var(--accent); border-color: var(--accent); background: rgba(0,113,227,0.05); }
+
+/* ── Case Meta (Bilingual Info Block) ── */
+.case-meta {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin-bottom: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.case-meta-names {
+  font-size: 1.05rem;
+  font-weight: 600;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e8e8ed;
+}
+.case-meta-zh { color: var(--text); }
+.case-meta-sep { color: #c7c7cc; margin: 0 6px; }
+.case-meta-en { color: var(--text-sub); font-weight: 400; }
+.case-meta-block { display: flex; flex-direction: column; gap: 4px; }
+.case-meta-row {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 10px;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--text);
+}
+.case-meta-row-en { color: var(--text-sub); font-size: 0.85rem; }
+.case-meta-label {
+  font-weight: 600;
+  font-size: 0.78rem;
+  color: var(--text-sub);
+  padding-top: 2px;
+  white-space: nowrap;
+}
+.case-title-en {
+  font-weight: 400;
+  font-size: 0.65em;
+  color: var(--text-sub);
+  margin-left: 8px;
+}

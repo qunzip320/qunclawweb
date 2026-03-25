@@ -56,6 +56,36 @@ function setCrumb(caseInfo) {
   `;
 }
 
+// ── 双语结构化信息区 ──────────────────────────────────────────────────────
+function renderCaseMeta(caseInfo) {
+  const el = document.getElementById('case-meta-section');
+  if (!el || !caseInfo) return;
+
+  const row = (labelZh, labelEn, zh, en) => (zh || en) ? `
+    <div class="case-meta-block">
+      <div class="case-meta-row">
+        <span class="case-meta-label">${labelZh}</span>
+        <span>${zh || ''}</span>
+      </div>
+      <div class="case-meta-row case-meta-row-en">
+        <span class="case-meta-label">${labelEn}</span>
+        <span>${en || ''}</span>
+      </div>
+    </div>` : '';
+
+  el.innerHTML = `
+    <div class="case-meta-names">
+      <span class="case-meta-zh">${caseInfo.titleZh || ''}</span>
+      <span class="case-meta-sep"> / </span>
+      <span class="case-meta-en">${caseInfo.titleEn || ''}</span>
+    </div>
+    ${row('功能说明', 'Description', caseInfo.descZh, caseInfo.descEn)}
+    ${row('所需技能', 'Skills', caseInfo.skillsZh, caseInfo.skillsEn)}
+    ${row('使用方法', 'How to Use', caseInfo.usageZh, caseInfo.usageEn)}
+  `;
+  el.style.display = 'block';
+}
+
 // ── TOC 生成（延迟执行） ──────────────────────────────────────────────────
 function generateTOC() {
   const content = document.getElementById('markdown-content');
@@ -146,14 +176,24 @@ function renderMarkdown(raw) {
 
 // ── 查找 sessionStorage 中的案例元数据 ────────────────────────────────────
 function getCaseInfoFromSession(filename) {
+  // 优先查 API 缓存
   try {
     const raw = sessionStorage.getItem(SESSION_KEY);
-    if (!raw) return null;
-    const { cases } = JSON.parse(raw);
-    return cases?.find(c => c.filename === filename) || null;
-  } catch {
-    return null;
-  }
+    if (raw) {
+      const { cases } = JSON.parse(raw);
+      const found = cases?.find(c => c.filename === filename);
+      if (found) return found;
+    }
+  } catch {}
+  // 回退查 demo 案例（由 main.js 存入 localStorage）
+  try {
+    const demoRaw = localStorage.getItem('qunclawweb-demo-cases');
+    if (demoRaw) {
+      const demos = JSON.parse(demoRaw);
+      return demos?.find(c => c.filename === filename) || null;
+    }
+  } catch {}
+  return null;
 }
 
 // ── 加载内容 ──────────────────────────────────────────────────────────────
@@ -174,13 +214,17 @@ async function loadContent() {
   const caseInfo = getCaseInfoFromSession(file);
   setCrumb(caseInfo);
 
-  // 页面标题
+  // 页面标题（双语）
   if (caseInfo) {
-    const t = lang === 'zh' ? caseInfo.titleZh : caseInfo.titleEn;
-    document.title = `${t} — Qun-OpenClaw`;
+    document.title = `${caseInfo.titleZh} / ${caseInfo.titleEn} — Claw`;
     const pageTitle = document.getElementById('case-title');
-    if (pageTitle) pageTitle.textContent = t;
+    if (pageTitle) {
+      pageTitle.innerHTML = `${caseInfo.titleZh || ''}<span class="case-title-en"> / ${caseInfo.titleEn || ''}</span>`;
+    }
   }
+
+  // 双语结构化信息区
+  renderCaseMeta(caseInfo);
 
   // GitHub 链接
   const ghLink = document.getElementById('github-link');
@@ -198,8 +242,26 @@ async function loadContent() {
       </div>`;
   }
 
+  // demo 案例无 GitHub 原文，直接结束
+  if (file.startsWith('demo-')) {
+    if (content) content.innerHTML = '';
+    return;
+  }
+
   try {
-    const res = await fetch(`/api/content?file=${encodeURIComponent(file)}`);
+    // 中文模式：请求翻译版本，用 sessionStorage 按语言分别缓存
+    const cacheKey = `qunclawweb-md-${lang}-${file}`;
+    const cached = sessionStorage.getItem(cacheKey);
+    if (cached) {
+      renderMarkdown(cached);
+      return;
+    }
+
+    const apiUrl = lang === 'zh'
+      ? `/api/content?file=${encodeURIComponent(file)}&lang=zh`
+      : `/api/content?file=${encodeURIComponent(file)}`;
+
+    const res = await fetch(apiUrl);
 
     if (res.status === 403 || res.status === 404) {
       window.location.href = '/404.html';
@@ -208,6 +270,7 @@ async function loadContent() {
     if (!res.ok) throw new Error(`API ${res.status}`);
 
     const markdown = await res.text();
+    try { sessionStorage.setItem(cacheKey, markdown); } catch {}
     renderMarkdown(markdown);
 
   } catch (err) {

@@ -18,6 +18,92 @@ const categoryMap = {
   'finance-trading':       { zh: '金融与交易',           en: 'Finance & Trading' },
 };
 
+// ── 示例案例（本地静态，始终展示） ────────────────────────────────────────
+const DEMO_CASES = [
+  {
+    filename: 'demo-article-writer.md', category: 'creative-building',
+    titleZh: '写文章', titleEn: 'Article Writer',
+    descZh: '根据主题生成完整文章', descEn: 'Generate a full article from a topic prompt.',
+    skillsZh: '提示词工程、文本生成', skillsEn: 'Prompt engineering, text generation',
+    usageZh: '输入主题关键词，AI 自动生成结构完整的长文章', usageEn: 'Enter a topic keyword and the AI generates a well-structured long-form article.',
+    githubUrl: '',
+  },
+  {
+    filename: 'demo-video-script.md', category: 'creative-building',
+    titleZh: '视频脚本', titleEn: 'Video Script',
+    descZh: '生成短视频脚本', descEn: 'Generate short-form video scripts.',
+    skillsZh: '脚本创作、文本生成', skillsEn: 'Script writing, text generation',
+    usageZh: '描述视频主题，自动生成分段脚本内容', usageEn: 'Describe the video topic and get a segmented script automatically.',
+    githubUrl: '',
+  },
+  {
+    filename: 'demo-email-writer.md', category: 'productivity',
+    titleZh: '邮件生成', titleEn: 'Email Generator',
+    descZh: '自动写邮件回复', descEn: 'Automatically draft email replies.',
+    skillsZh: '邮件写作、上下文理解', skillsEn: 'Email writing, context understanding',
+    usageZh: '粘贴收到的邮件，自动生成合适的回复内容', usageEn: 'Paste a received email and get a suitable reply drafted automatically.',
+    githubUrl: '',
+  },
+  {
+    filename: 'demo-summarizer.md', category: 'productivity',
+    titleZh: '总结工具', titleEn: 'Summarizer',
+    descZh: '总结长文本内容', descEn: 'Summarize long documents and articles.',
+    skillsZh: '文本分析、摘要提取', skillsEn: 'Text analysis, summary extraction',
+    usageZh: '粘贴长文章或报告，生成简洁的要点摘要', usageEn: 'Paste a long article or report to get a concise bullet-point summary.',
+    githubUrl: '',
+  },
+  {
+    filename: 'demo-research-organizer.md', category: 'research-learning',
+    titleZh: '资料整理', titleEn: 'Research Organizer',
+    descZh: '整理多来源信息', descEn: 'Organize information from multiple sources.',
+    skillsZh: '信息整合、结构化输出', skillsEn: 'Information synthesis, structured output',
+    usageZh: '输入多个来源的内容片段，整合为有条理的研究资料', usageEn: 'Input snippets from multiple sources and get organized, structured research notes.',
+    githubUrl: '',
+  },
+  {
+    filename: 'demo-trend-analysis.md', category: 'research-learning',
+    titleZh: '趋势分析', titleEn: 'Trend Analysis',
+    descZh: '总结某领域趋势', descEn: 'Summarize trends in a specific domain.',
+    skillsZh: '数据解读、领域分析', skillsEn: 'Data interpretation, domain analysis',
+    usageZh: '描述某个行业或话题，生成当前趋势总结报告', usageEn: 'Describe an industry or topic to get a current trend summary report.',
+    githubUrl: '',
+  },
+  {
+    filename: 'demo-code-generator.md', category: 'infrastructure-devops',
+    titleZh: '代码生成', titleEn: 'Code Generator',
+    descZh: '根据需求生成代码', descEn: 'Generate code from natural language requirements.',
+    skillsZh: '提示词工程、代码生成', skillsEn: 'Prompt engineering, code generation',
+    usageZh: '用自然语言描述功能需求，自动输出可运行代码', usageEn: 'Describe a feature in natural language and get runnable code output.',
+    githubUrl: '',
+  },
+  {
+    filename: 'demo-code-explainer.md', category: 'infrastructure-devops',
+    titleZh: '代码解释', titleEn: 'Code Explainer',
+    descZh: '解释已有代码逻辑', descEn: 'Explain the logic of existing code.',
+    skillsZh: '代码分析、自然语言解释', skillsEn: 'Code analysis, natural language explanation',
+    usageZh: '粘贴代码片段，获取逐行或逻辑层面的中文解释', usageEn: 'Paste a code snippet and get a line-by-line or logic-level explanation.',
+    githubUrl: '',
+  },
+  {
+    filename: 'demo-daily-brief.md', category: 'productivity',
+    titleZh: '每日简报', titleEn: 'Daily Brief',
+    descZh: '自动生成信息摘要', descEn: 'Automatically generate a daily news digest.',
+    skillsZh: '信息筛选、摘要生成', skillsEn: 'Information filtering, summary generation',
+    usageZh: '输入订阅源或关键词，每日自动生成信息摘要推送', usageEn: 'Input RSS feeds or keywords to auto-generate a daily information digest.',
+    githubUrl: '',
+  },
+  {
+    filename: 'demo-workflow-automation.md', category: 'productivity',
+    titleZh: '工作流自动化', titleEn: 'Workflow Automation',
+    descZh: '自动执行任务流程', descEn: 'Automate repetitive task workflows.',
+    skillsZh: '任务规划、工具调用', skillsEn: 'Task planning, tool calling',
+    usageZh: '描述重复性工作流程，自动拆分并执行各步骤', usageEn: 'Describe a repetitive workflow and let the AI break it down and execute each step.',
+    githubUrl: '',
+  },
+];
+// 让 case.js 也能查到 demo 案例的元数据
+localStorage.setItem('qunclawweb-demo-cases', JSON.stringify(DEMO_CASES));
+
 // ── 状态 ──────────────────────────────────────────────────────────────────
 let lang            = localStorage.getItem(LANG_KEY) || 'zh';
 let activeCategory  = 'all';
@@ -209,9 +295,9 @@ async function loadCases() {
   if (cached) {
     try {
       const { cases } = JSON.parse(cached);
-      allCases = cases;
-      updateCount(cases.length);
-      buildCategoryTabs(cases);
+      allCases = [...cases, ...DEMO_CASES];
+      updateCount(allCases.length);
+      buildCategoryTabs(allCases);
       renderCards(filterCases());
     } catch {
       sessionStorage.removeItem(SESSION_KEY);
@@ -233,19 +319,18 @@ async function loadCases() {
     // 数据有变化才触发重渲染
     if (fresh !== prev) {
       sessionStorage.setItem(SESSION_KEY, fresh);
-      allCases = data.cases;
-      updateCount(data.cases.length);
-      buildCategoryTabs(data.cases);
+      allCases = [...data.cases, ...DEMO_CASES];
+      updateCount(allCases.length);
+      buildCategoryTabs(allCases);
       renderCards(filterCases());
     }
   } catch (err) {
     console.error('[loadCases]', err);
     if (!allCases.length) {
-      const grid = $('card-grid');
-      if (grid) grid.innerHTML = `
-        <p class="error-msg">
-          ${lang === 'zh' ? '加载失败，请稍后刷新重试。' : 'Failed to load. Please refresh.'}
-        </p>`;
+      allCases = [...DEMO_CASES];
+      updateCount(allCases.length);
+      buildCategoryTabs(allCases);
+      renderCards(filterCases());
     }
   }
 }
