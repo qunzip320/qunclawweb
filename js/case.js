@@ -245,19 +245,26 @@ async function loadContent() {
   // demo 案例：用自身字段生成简单正文
   if (file.startsWith('demo-')) {
     if (content && caseInfo) {
-      const title  = lang === 'zh' ? (caseInfo.titleZh || caseInfo.titleEn) : (caseInfo.titleEn || caseInfo.titleZh);
-      const desc   = lang === 'zh' ? (caseInfo.descZh  || caseInfo.descEn)  : (caseInfo.descEn  || caseInfo.descZh);
-      const skills = lang === 'zh' ? (caseInfo.skillsZh || caseInfo.skillsEn) : (caseInfo.skillsEn || caseInfo.skillsZh);
-      const usage  = lang === 'zh' ? (caseInfo.usageZh  || caseInfo.usageEn)  : (caseInfo.usageEn  || caseInfo.usageZh);
-      const md = [
-        `## ${lang === 'zh' ? '简介' : 'Overview'}`,
+      const isZh  = lang === 'zh';
+      const desc   = isZh ? (caseInfo.descZh   || caseInfo.descEn)   : (caseInfo.descEn   || caseInfo.descZh);
+      const skills = isZh ? (caseInfo.skillsZh  || caseInfo.skillsEn) : (caseInfo.skillsEn  || caseInfo.skillsZh);
+      const usage  = isZh ? (caseInfo.usageZh   || caseInfo.usageEn)  : (caseInfo.usageEn   || caseInfo.usageZh);
+      const h2 = (zh, en) => `## ${isZh ? zh : en}`;
+      const parts = [
+        h2('它做什么', 'What It Does'),
         desc || '',
-        skills ? `\n## ${lang === 'zh' ? '所需技能' : 'Skills Required'}\n${skills}` : '',
-        usage  ? `\n## ${lang === 'zh' ? '使用方法' : 'How to Use'}\n${usage}`  : '',
-      ].join('\n\n');
-      renderMarkdown(md);
+      ];
+      if (skills) parts.push(h2('需要的技能', 'Skills Required'), skills);
+      if (usage)  parts.push(h2('如何设置',   'How to Set Up'),  usage);
+      renderMarkdown(parts.join('\n\n'));
     } else if (content) {
       content.innerHTML = '';
+    }
+    // demo 案例也显示 GitHub 链接（如果有）
+    const ghLink = document.getElementById('github-link');
+    if (ghLink && caseInfo?.githubUrl) {
+      ghLink.href = caseInfo.githubUrl;
+      ghLink.style.display = 'inline-flex';
     }
     return;
   }
