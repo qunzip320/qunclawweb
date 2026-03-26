@@ -242,29 +242,49 @@ async function loadContent() {
       </div>`;
   }
 
-  // demo 案例：用自身字段生成简单正文
+  // demo 案例：有 sourceFile 的拉真实内容翻译，否则用元数据生成正文
   if (file.startsWith('demo-')) {
+    const ghLink = document.getElementById('github-link');
+    if (ghLink && caseInfo?.githubUrl) {
+      ghLink.href = caseInfo.githubUrl;
+      ghLink.style.display = 'inline-flex';
+    }
+
+    if (caseInfo?.sourceFile) {
+      // 拉真实 GitHub 文件并翻译
+      try {
+        const cacheKey = `qunclawweb-md-${lang}-${caseInfo.sourceFile}`;
+        const cached = sessionStorage.getItem(cacheKey);
+        if (cached) { renderMarkdown(cached); return; }
+
+        const apiUrl = lang === 'zh'
+          ? `/api/content?file=${encodeURIComponent(caseInfo.sourceFile)}&lang=zh`
+          : `/api/content?file=${encodeURIComponent(caseInfo.sourceFile)}`;
+        const r = await fetch(apiUrl);
+        if (!r.ok) throw new Error(`API ${r.status}`);
+        const markdown = await r.text();
+        try { sessionStorage.setItem(cacheKey, markdown); } catch {}
+        renderMarkdown(markdown);
+      } catch (err) {
+        console.error('[demo sourceFile]', err);
+        if (content) content.innerHTML = `<p class="error-msg">${lang === 'zh' ? '内容加载失败，请刷新重试。' : 'Failed to load content.'}</p>`;
+      }
+      return;
+    }
+
+    // 无 sourceFile：从元数据字段生成正文
     if (content && caseInfo) {
       const isZh  = lang === 'zh';
       const desc   = isZh ? (caseInfo.descZh   || caseInfo.descEn)   : (caseInfo.descEn   || caseInfo.descZh);
       const skills = isZh ? (caseInfo.skillsZh  || caseInfo.skillsEn) : (caseInfo.skillsEn  || caseInfo.skillsZh);
       const usage  = isZh ? (caseInfo.usageZh   || caseInfo.usageEn)  : (caseInfo.usageEn   || caseInfo.usageZh);
       const h2 = (zh, en) => `## ${isZh ? zh : en}`;
-      const parts = [
-        h2('它做什么', 'What It Does'),
-        desc || '',
-      ];
+      const parts = [h2('它做什么', 'What It Does'), desc || ''];
       if (skills) parts.push(h2('需要的技能', 'Skills Required'), skills);
       if (usage)  parts.push(h2('如何设置',   'How to Set Up'),  usage);
       renderMarkdown(parts.join('\n\n'));
     } else if (content) {
       content.innerHTML = '';
-    }
-    // demo 案例也显示 GitHub 链接（如果有）
-    const ghLink = document.getElementById('github-link');
-    if (ghLink && caseInfo?.githubUrl) {
-      ghLink.href = caseInfo.githubUrl;
-      ghLink.style.display = 'inline-flex';
     }
     return;
   }

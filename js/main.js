@@ -107,6 +107,7 @@ const DEMO_CASES = [
     skillsZh: '数据抓取、财务分析、结构化输出', skillsEn: 'Data scraping, financial analysis, structured output',
     usageZh: '输入股票代码或公司名称，自动获取最新财报数据并生成关键指标分析', usageEn: 'Enter a ticker or company name to fetch the latest earnings and generate key metric analysis.',
     githubUrl: 'https://github.com/hesamsheikh/awesome-openclaw-usecases/blob/main/usecases/earnings-tracker.md',
+    sourceFile: 'earnings-tracker.md',
   },
   {
     filename: 'demo-market-sentiment.md', category: 'finance-trading',
@@ -115,6 +116,7 @@ const DEMO_CASES = [
     skillsZh: '新闻聚合、情感分析、趋势判断', skillsEn: 'News aggregation, sentiment analysis, trend detection',
     usageZh: '输入资产名称或板块，汇总近期新闻与社区讨论，输出情绪评分与风险提示', usageEn: 'Enter an asset or sector to aggregate recent news and community posts into a sentiment score with risk signals.',
     githubUrl: 'https://github.com/hesamsheikh/awesome-openclaw-usecases/blob/main/usecases/polymarket-autopilot.md',
+    sourceFile: 'polymarket-autopilot.md',
   },
 ];
 // 让 case.js 也能查到 demo 案例的元数据
