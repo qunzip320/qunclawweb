@@ -274,14 +274,19 @@ async function loadContent() {
 
     // 无 sourceFile：从元数据字段生成正文
     if (content && caseInfo) {
-      const isZh  = lang === 'zh';
-      const desc   = isZh ? (caseInfo.descZh   || caseInfo.descEn)   : (caseInfo.descEn   || caseInfo.descZh);
-      const skills = isZh ? (caseInfo.skillsZh  || caseInfo.skillsEn) : (caseInfo.skillsEn  || caseInfo.skillsZh);
-      const usage  = isZh ? (caseInfo.usageZh   || caseInfo.usageEn)  : (caseInfo.usageEn   || caseInfo.usageZh);
+      const isZh = lang === 'zh';
+      const pick = (zh, en) => isZh ? (zh || en || '') : (en || zh || '');
+      const desc     = pick(caseInfo.descZh,     caseInfo.descEn);
+      const features = pick(caseInfo.featuresZh,  caseInfo.featuresEn);
+      const skills   = pick(caseInfo.skillsZh,    caseInfo.skillsEn);
+      const usage    = pick(caseInfo.usageZh,     caseInfo.usageEn);
+      const tips     = pick(caseInfo.tipsZh,      caseInfo.tipsEn);
       const h2 = (zh, en) => `## ${isZh ? zh : en}`;
-      const parts = [h2('它做什么', 'What It Does'), desc || ''];
-      if (skills) parts.push(h2('需要的技能', 'Skills Required'), skills);
-      if (usage)  parts.push(h2('如何设置',   'How to Set Up'),  usage);
+      const parts = [desc];
+      if (features) parts.push(h2('你可以做的事情', 'What You Can Do'), features);
+      if (skills)   parts.push(h2('你需要的技能',   'Skills You Need'), skills);
+      if (usage)    parts.push(h2('如何设置',       'How to Set Up'),   usage);
+      if (tips)     parts.push(h2('提示',           'Tips'),            tips);
       renderMarkdown(parts.join('\n\n'));
     } else if (content) {
       content.innerHTML = '';
