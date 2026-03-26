@@ -242,9 +242,23 @@ async function loadContent() {
       </div>`;
   }
 
-  // demo 案例无 GitHub 原文，直接结束
+  // demo 案例：用自身字段生成简单正文
   if (file.startsWith('demo-')) {
-    if (content) content.innerHTML = '';
+    if (content && caseInfo) {
+      const title  = lang === 'zh' ? (caseInfo.titleZh || caseInfo.titleEn) : (caseInfo.titleEn || caseInfo.titleZh);
+      const desc   = lang === 'zh' ? (caseInfo.descZh  || caseInfo.descEn)  : (caseInfo.descEn  || caseInfo.descZh);
+      const skills = lang === 'zh' ? (caseInfo.skillsZh || caseInfo.skillsEn) : (caseInfo.skillsEn || caseInfo.skillsZh);
+      const usage  = lang === 'zh' ? (caseInfo.usageZh  || caseInfo.usageEn)  : (caseInfo.usageEn  || caseInfo.usageZh);
+      const md = [
+        `## ${lang === 'zh' ? '简介' : 'Overview'}`,
+        desc || '',
+        skills ? `\n## ${lang === 'zh' ? '所需技能' : 'Skills Required'}\n${skills}` : '',
+        usage  ? `\n## ${lang === 'zh' ? '使用方法' : 'How to Use'}\n${usage}`  : '',
+      ].join('\n\n');
+      renderMarkdown(md);
+    } else if (content) {
+      content.innerHTML = '';
+    }
     return;
   }
 
