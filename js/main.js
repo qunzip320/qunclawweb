@@ -100,6 +100,22 @@ const DEMO_CASES = [
     usageZh: '描述重复性工作流程，自动拆分并执行各步骤', usageEn: 'Describe a repetitive workflow and let the AI break it down and execute each step.',
     githubUrl: '',
   },
+  {
+    filename: 'demo-earnings-tracker.md', category: 'finance-trading',
+    titleZh: '财报追踪助手', titleEn: 'Earnings Tracker',
+    descZh: '自动追踪上市公司财报并生成分析摘要', descEn: 'Automatically track earnings reports and generate analysis summaries.',
+    skillsZh: '数据抓取、财务分析、结构化输出', skillsEn: 'Data scraping, financial analysis, structured output',
+    usageZh: '输入股票代码或公司名称，自动获取最新财报数据并生成关键指标分析', usageEn: 'Enter a ticker or company name to fetch the latest earnings and generate key metric analysis.',
+    githubUrl: '',
+  },
+  {
+    filename: 'demo-market-sentiment.md', category: 'finance-trading',
+    titleZh: '市场情绪分析', titleEn: 'Market Sentiment Analyzer',
+    descZh: '聚合多源资讯，量化市场情绪指数', descEn: 'Aggregate multi-source news and quantify market sentiment scores.',
+    skillsZh: '新闻聚合、情感分析、趋势判断', skillsEn: 'News aggregation, sentiment analysis, trend detection',
+    usageZh: '输入资产名称或板块，汇总近期新闻与社区讨论，输出情绪评分与风险提示', usageEn: 'Enter an asset or sector to aggregate recent news and community posts into a sentiment score with risk signals.',
+    githubUrl: '',
+  },
 ];
 // 让 case.js 也能查到 demo 案例的元数据
 localStorage.setItem('qunclawweb-demo-cases', JSON.stringify(DEMO_CASES));
